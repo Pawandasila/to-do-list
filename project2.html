@@ -54,44 +54,104 @@
 
     <div class="container my-4">
         <h2 class="text-center">TODOs List</h2>
-         
-            <div class="form-group">
-                <label for="title">Title</label>
-                <input type="text" class="form-control" id="title" aria-describedby="emailHelp">
-                <small id="emailHelp" class="form-text text-muted">Add an item to the list</small>
-            </div>
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" id="title" aria-describedby="emailHelp">
+            <small id="emailHelp" class="form-text text-muted">Add an item to the list</small>
+        </div>
 
-            <div class="form-group">
-                <label for="description">Description</label>
-                <textarea class="form-control" id="description" rows="3"></textarea>
-            </div>
-            
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description" rows="3"></textarea>
+        </div>
 
-            <button   id="add" class="btn btn-primary">Add to list</button>
-            <button  id="clear" class="btn btn-primary" onclick="clearStorage()">Clear list</button>
-         
+        <button id="add" class="btn btn-primary">Add to list</button>
+        <button id="clear" class="btn btn-primary">Clear list</button>
 
         <div id="items" class="my-4">
             <h2>Your Items</h2>
             <table class="table">
                 <thead>
-                  <tr>
-                    <th scope="col">SNo</th>
-                    <th scope="col">Item Title</th>
-                    <th scope="col">Item Description</th> 
-                    <th scope="col">Actions</th> 
-                  </tr>
+                    <tr>
+                        <th scope="col">SNo</th>
+                        <th scope="col">Item Title</th>
+                        <th scope="col">Item Description</th>
+                        <!-- <th scope="col">Actions</th> -->
+                    </tr>
                 </thead>
                 <tbody id="tableBody">
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Get some Coffee</td>
-                    <td>You need coffee as you are a coder</td> 
-                    <td><button class="btn btn-sm btn-primary">Delete</button></td> 
-                  </tr>
-                  
+                    <tr class="default-data" style="display: none;">
+                        <!-- <th scope="row">1</th> -->
+                        <!-- <td>Default Title</td>
+                        <td>Default Description</td> -->
+                        <!-- <td><button class="btn btn-sm btn-danger delete">Delete</button></td> -->
+                    </tr>
                 </tbody>
               </table>
+        </div>
+    </div>
+    <div class="modal fade" id="emptyFieldsModal" tabindex="-1" role="dialog" aria-labelledby="emptyFieldsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="emptyFieldsModalLabel">Attention</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Please fill in both title and description before adding an item.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Item</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Add your edit form fields here -->
+                    <div class="form-group">
+                        <label for="editTitle">Title</label>
+                        <input type="text" class="form-control" id="editTitle">
+                    </div>
+                    <div class="form-group">
+                        <label for="editDescription">Description</label>
+                        <textarea class="form-control" id="editDescription" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveEdit">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="emptyListModal" tabindex="-1" role="dialog" aria-labelledby="emptyListModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="emptyListModalLabel">Empty List</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    There are no items to clear.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -106,69 +166,110 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
         crossorigin="anonymous"></script>
+        
         <script>
-            function getAndUpdate(){
-                console.log("Updating List...");
-                tit = document.getElementById('title').value;
-                desc = document.getElementById('description').value;
-                if (localStorage.getItem('itemsJson')==null){
-                    itemJsonArray = [];
-                    itemJsonArray.push([tit, desc]);
-                    localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray))
-                }
-                else{
-                    itemJsonArrayStr = localStorage.getItem('itemsJson')
-                    itemJsonArray = JSON.parse(itemJsonArrayStr);
-                    itemJsonArray.push([tit, desc]);
-                    localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray))
-                }
-                update();
-            }
+             $(document).ready(function() {
+            $("#add").click(function() {
+                var title = $("#title").val();
+                var description = $("#description").val();
 
-            function update(){
-                if (localStorage.getItem('itemsJson')==null){
-                    itemJsonArray = []; 
-                    localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray))
-                } 
-                else{
-                    itemJsonArrayStr = localStorage.getItem('itemsJson')
-                    itemJsonArray = JSON.parse(itemJsonArrayStr); 
+                if (title && description) {
+                    // Show the default data row if it's the first title
+                    $(".default-data").show();
+
+                    var newRow = $("<tr>");
+                    var cols = "";
+
+                    cols += "<td>" + ($("#tableBody tr").length + 1) + "</td>";
+                    cols += "<td>" + title + "</td>";
+                    cols += "<td>" + description + "</td>";
+                    cols += '<td><button class="btn btn-sm btn-danger edit" data-toggle="modal" data-target="#editModal">Edit</button></td>';
+                    cols += '<td><button class="btn btn-sm btn-danger delete">Delete</button></td>';
+
+                    newRow.append(cols);
+                    $("#tableBody").append(newRow);
+
+                    $("#title, #description").val('');
+
+                    // Close the modal if it's open
+                    $('#emptyFieldsModal').modal('hide');
+                } else {
+                    // Show the modal for empty fields
+                    $('#emptyFieldsModal').modal('show');
                 }
-                // Populate the table
-                let tableBody = document.getElementById("tableBody");
-                let str = "";
-                itemJsonArray.forEach((element, index) => {
-                    str += `
-                    <tr>
-                    <th scope="row">${index + 1}</th>
-                    <td>${element[0]}</td>
-                    <td>${element[1]}</td> 
-                    <td><button class="btn btn-sm btn-primary" onclick="deleted(${index})">Delete</button></td> 
-                    </tr>`; 
+            });
+
+            // Event listener for the Edit button inside the table
+            $("#tableBody").on("click", ".edit", function() {
+                // Get the values from the table row for editing
+                var row = $(this).closest("tr");
+                var title = row.find("td:eq(1)").text();
+                var description = row.find("td:eq(2)").text();
+
+                // Set the values in the edit modal
+                $("#editTitle").val(title);
+                $("#editDescription").val(description);
+            });
+
+            // Event listener for the Save Edit button in the Edit modal
+            $("#saveEdit").click(function() {
+                // Get the edited values
+                var editedTitle = $("#editTitle").val();
+                var editedDescription = $("#editDescription").val();
+
+                // Update the values in the table row
+                var row = $(".edit").closest("tr");
+                row.find("td:eq(1)").text(editedTitle);
+                row.find("td:eq(2)").text(editedDescription);
+
+                // Close the Edit modal
+                $('#editModal').modal('hide');
+            });
+
+            $("#deleteButton").click(function() {
+               $('#deleteModal').model('show');
+                
+            });
+             // Delete row on delete button click
+             $("#tableBody").on("click", ".delete", function() {
+                    // $("#deleteModal").modal('show');
+                    $(this).closest("tr").remove();
+                    updateSerialNumbers();
                 });
-                tableBody.innerHTML = str;
-            }
-            add = document.getElementById("add");
-            add.addEventListener("click", getAndUpdate);
-            update();
-            function deleted(itemIndex){
-                console.log("Delete", itemIndex);
-                itemJsonArrayStr = localStorage.getItem('itemsJson')
-                itemJsonArray = JSON.parse(itemJsonArrayStr);
-                // Delete itemIndex element from the array
-                itemJsonArray.splice(itemIndex, 1);
-                localStorage.setItem('itemsJson', JSON.stringify(itemJsonArray));
-                update();
 
-            }
-            function clearStorage(){
-                if (confirm("Do you areally want to clear?")){
-                console.log('Clearing the storage')
-                localStorage.clear();
-                update()
+                $("#clear").click(function() {
+                    $("#tableBody").empty();
+                });
+
+                function updateSerialNumbers() {
+                    $("#tableBody tr").each(function(index) {
+                        $(this).find("td:first").text(index + 1);
+                    });
                 }
-            }
+            });
         </script>
+        <script>
+            $(document).ready(function() {
+                $("#clear").click(function() {
+                    // Check if there are items to clear
+                    if ($("#tableBody tr").length === 0) {
+                        // Update the text of the empty list modal
+                        $('#emptyListModal .modal-body').text('There are no items to clear.');
+        
+                        // Display the empty list modal
+                        $('#emptyListModal').modal('show');
+                    } else {
+                        // Clear the items
+                        $("#tableBody").empty();
+                    }
+                });
+        
+                // ... (the rest of your existing JavaScript code) ...
+            });
+        </script>
+
+
+   
 </body>
 
 </html>
