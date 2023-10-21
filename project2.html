@@ -155,121 +155,22 @@
         </div>
     </div>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous">
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous">
+    </script>
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
         integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous">
+    </script>
         
-        <script>
-             $(document).ready(function() {
-            $("#add").click(function() {
-                var title = $("#title").val();
-                var description = $("#description").val();
-
-                if (title && description) {
-                    // Show the default data row if it's the first title
-                    $(".default-data").show();
-
-                    var newRow = $("<tr>");
-                    var cols = "";
-
-                    cols += "<td>" + ($("#tableBody tr").length + 1) + "</td>";
-                    cols += "<td>" + title + "</td>";
-                    cols += "<td>" + description + "</td>";
-                    cols += '<td><button class="btn btn-sm btn-danger edit" data-toggle="modal" data-target="#editModal">Edit</button></td>';
-                    cols += '<td><button class="btn btn-sm btn-danger delete">Delete</button></td>';
-
-                    newRow.append(cols);
-                    $("#tableBody").append(newRow);
-
-                    $("#title, #description").val('');
-
-                    // Close the modal if it's open
-                    $('#emptyFieldsModal').modal('hide');
-                } else {
-                    // Show the modal for empty fields
-                    $('#emptyFieldsModal').modal('show');
-                }
-            });
-
-            // Event listener for the Edit button inside the table
-            $("#tableBody").on("click", ".edit", function() {
-                // Get the values from the table row for editing
-                var row = $(this).closest("tr");
-                var title = row.find("td:eq(1)").text();
-                var description = row.find("td:eq(2)").text();
-
-                // Set the values in the edit modal
-                $("#editTitle").val(title);
-                $("#editDescription").val(description);
-            });
-
-            // Event listener for the Save Edit button in the Edit modal
-            $("#saveEdit").click(function() {
-                // Get the edited values
-                var editedTitle = $("#editTitle").val();
-                var editedDescription = $("#editDescription").val();
-
-                // Update the values in the table row
-                var row = $(".edit").closest("tr");
-                row.find("td:eq(1)").text(editedTitle);
-                row.find("td:eq(2)").text(editedDescription);
-
-                // Close the Edit modal
-                $('#editModal').modal('hide');
-            });
-
-            $("#deleteButton").click(function() {
-               $('#deleteModal').model('show');
-                
-            });
-             // Delete row on delete button click
-             $("#tableBody").on("click", ".delete", function() {
-                    // $("#deleteModal").modal('show');
-                    $(this).closest("tr").remove();
-                    updateSerialNumbers();
-                });
-
-                $("#clear").click(function() {
-                    $("#tableBody").empty();
-                });
-
-                function updateSerialNumbers() {
-                    $("#tableBody tr").each(function(index) {
-                        $(this).find("td:first").text(index + 1);
-                    });
-                }
-            });
-        </script>
-        <script>
-            $(document).ready(function() {
-                $("#clear").click(function() {
-                    // Check if there are items to clear
-                    if ($("#tableBody tr").length === 0) {
-                        // Update the text of the empty list modal
-                        $('#emptyListModal .modal-body').text('There are no items to clear.');
-        
-                        // Display the empty list modal
-                        $('#emptyListModal').modal('show');
-                    } else {
-                        // Clear the items
-                        $("#tableBody").empty();
-                    }
-                });
-        
-                // ... (the rest of your existing JavaScript code) ...
-            });
-        </script>
-
-
-   
+    <script src="index.js"></script>   
 </body>
 
 </html>

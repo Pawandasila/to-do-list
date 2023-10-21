@@ -1,142 +1,95 @@
+$(document).ready(function() {
+    $("#add").click(function() {
+        var title = $("#title").val();
+        var description = $("#description").val();
 
-/* js console api(appication programming interface) */
+        if (title && description) {
+            // $(".default-data").show();
 
-//  console.log("Hello world");
-//  console.warn("this is warn");
-//  console.error("this is an error");
+            var newRow = $("<tr>");
+            var cols = "";
 
-//  ways to print in js
-//  alert("me");
-//  document.write("this is");
-//  document.write("this is");
-//  console.clear();
-//  console.log("this is",4+6,"another log");
+            cols += "<td>" + ($("#tableBody tr").length ) + "</td>";
+            cols += "<td>" + title + "</td>";
+            cols += "<td>" + description + "</td>";
+            cols += '<td><button class="btn btn-sm btn-danger edit" data-toggle="modal" data-target="#editModal">Edit</button></td>';
+            cols += '<td><button class="btn btn-sm btn-danger delete">Delete</button></td>';
 
-//js variables
-// var number =34;
-// var number2 =78;
-// console.log(number+number2);
+            newRow.append(cols);
+            $("#tableBody").append(newRow);
 
-// datatypes in datatypes
-// string
-// var str1="thsi is a string";
-// var str5="thsi is a second string";
-// var str2="thsi is a next string";
-//number
-// var num =3;
-// var num3 = 6;
+            $("#title, #description").val('');
 
-//
-//Object
-// var marks={
-//     ravi :34,
-//     shibham :34,
-//     sumit :99,
-//     pawan : 99.9999
-// }
+            // Close the modal if it's open
+            $('#emptyFieldsModal').modal('hide');
+        } else {
+            // Show the modal for empty fields
+            $('#emptyFieldsModal').modal('show');
+        }
+    });
 
-//booleans
-// var a =true;
-// var b=false;
+    var editedRow;
 
+    $("#tableBody").on("click", ".edit", function() {
+        // Get the row to edit
+        editedRow = $(this).closest("tr");
 
-// undefined,null
-// var und = undefined;
-// var und;
-// console.log(und);
+        // Get the values from the table row for editing
+        var title = editedRow.find("td:eq(1)").text();
+        var description = editedRow.find("td:eq(2)").text();
 
-// var n =null;
-// console.log(n);
+        // Set the values in the edit modal
+        $("#editTitle").val(title);
+        $("#editDescription").val(description);
+    });
 
-/* there are two types of datatype
-1) primitive --> undefined, null, number,string,boolean,symbol
-2) referrence --> arrays and objects*/
+    // Event listener for the Save Edit button in the Edit modal
+    $("#saveEdit").click(function() {
+        // Get the edited values
+        var editedTitle = $("#editTitle").val();
+        var editedDescription = $("#editDescription").val();
 
-// var arr=[1,2,3,"string",5,5,3];
-// console.log(arr);
+        // Update the values in the specific table row
+        editedRow.find("td:eq(1)").text(editedTitle);
+        editedRow.find("td:eq(2)").text(editedDescription);
 
-// opeators
-// var a=7;
-// var b=7;
-// console.log(a+b);
-// console.log(a-b);
-// console.log(a*b);
-// console.log(a/b);
+        // Close the Edit modal
+        $('#editModal').modal('hide');
+    });
 
-//function in js
-// function avg(a,b){
-//     c=(a+b)/2;
-//     return c;
-// }
-// c1= avg(3,5);
-// c5= avg(3,5);
-// console.log(c1,c5);
-// console.log("this is a string in different color");
+    $("#deleteButton").click(function() {
+       $('#deleteModal').model('show');
+        
+    });
+     // Delete row on delete button click
+     $("#tableBody").on("click", ".delete", function() {
+            // $("#deleteModal").modal('show');
+            $(this).closest("tr").remove();
+            updateSerialNumbers();
+        });
 
-//if else
-// var age = 55;
-// if(age>8){
-//     console.log("you are not a kid anymore");
-// }
-// else{
-//     console.log("you are a kid plese focus in your studies");
-// }
-var arr = [1,2,3,4,5,6];
-// console.log(arr);
-// for(var i=0;i<arr.length;i++){
-//     console.log(arr[i]);
-// }
+        $("#clear").click(function() {
+            $("#tableBody").empty();
+        });
 
-// arr.forEach(function(elements){
-//     console.log(elements);
-// })
-let j=0;
-const ac=78;
-// console.log(ac);
-// while(j<arr.length){
-//     console.log(arr[j]);
-//     j++;
-// }
-// do{
-//     console.log(arr[j]);
-//     j++
-// }while(j<arr.length)
+        function updateSerialNumbers() {
+            $("#tableBody tr").each(function(index) {
+                $(this).find("td:first").text(index + 1);
+            });
+        }
+    });
 
-// for(var i=0;i<arr.length;i++){
-//     if(i==2){
-//         // break;
-//         continue;
-    // }
-    // console.log(arr[i]);
-
-// }
-
-// let myarr=["fan",3434,3.3,"pawan"];
-//array method
-// console.log(myarr.length);
-// myarr.pop();
-// myarr.push("news");
-// myarr.shift();
-// myarr.unshift("fan");
-// console.log(myarr.unshift("fan"))
-
-// console.log(myarr);
-
-//string method in js
-// let mystr = "pawan is a good boy good";
-// console.log(mystr);
-// console.log(mystr.length);
-// console.log(mystr.indexOf("good"));
-// console.log(mystr.lastIndexOf("good"));
-// console.log(mystr.slice(1,3));
-// console.log(mystr.replace("is","good"));
-
-// mydate= new Date();
-// console.log(mydate);
-// console.log(mydate.getTime());
-// console.log(mydate.getFullYear());
-// console.log(mydate.getDay());
-// console.log(mydate.getMinutes());
-
-var click= document.getElementById('click')
-console.log(click);
+    $(document).ready(function() {
+        $("#clear").click(function() {
+            // Check if there are items to clear
+            if ($("#tableBody tr").length === 0) {
+                // Update the text of the empty list modal
+                $('#emptyListModal .modal-body').text('There are no items to clear.');
+                // Display the empty list modal
+                $('#emptyListModal').modal('show');
+            } else {
+                // Clear the items
+                $("#tableBody").empty();
+            }
+        });
+    });
